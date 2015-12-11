@@ -1,0 +1,155 @@
+
+<title>PHP Multi-Version Linter</title>
+<style type='text/css'>
+.resultPass { 
+	background-color: #cfc;
+}
+.resultFail {
+	background-color: #fcc;
+}
+.tbl {
+	width: 95%;
+	margin: 0px auto;
+}
+body {
+	font-family: sans-serif;
+}
+</style>
+<h1>PHP Multi-Version Linter</h1>
+This script simply lints the PHP file for syntax errors, it does not verify function availability, or that your script will work for a particular purpose.<br><br>
+
+	<table class='tbl resultPass'>
+		<tr>
+			<td colspan='2'><hr><h2>[Pass] PHP Version 7.0.0, Non-Thread Safe, x64</h2></td>
+		</tr>
+		<tr>
+			<td width='15%'><strong>Error Text</strong></td>
+			<td>n/a</td>
+		</tr>
+	</table>
+	<table class='tbl resultPass'>
+		<tr>
+			<td colspan='2'><hr><h2>[Pass] PHP Version 5.6.16, Non-Thread Safe, x64</h2></td>
+		</tr>
+		<tr>
+			<td width='15%'><strong>Error Text</strong></td>
+			<td>n/a</td>
+		</tr>
+	</table>
+	<table class='tbl resultPass'>
+		<tr>
+			<td colspan='2'><hr><h2>[Pass] PHP Version 5.5.30, Non-Thread Safe, x64</h2></td>
+		</tr>
+		<tr>
+			<td width='15%'><strong>Error Text</strong></td>
+			<td>n/a</td>
+		</tr>
+	</table>
+	<table class='tbl resultPass'>
+		<tr>
+			<td colspan='2'><hr><h2>[Pass] PHP Version 5.4.45, Non-Thread Safe, x86</h2></td>
+		</tr>
+		<tr>
+			<td width='15%'><strong>Error Text</strong></td>
+			<td>n/a</td>
+		</tr>
+	</table>
+	<table class='tbl resultPass'>
+		<tr>
+			<td colspan='2'><hr><h2>[Pass] PHP Version 5.3.8, Non-Thread Safe, x86</h2></td>
+		</tr>
+		<tr>
+			<td width='15%'><strong>Error Text</strong></td>
+			<td>n/a</td>
+		</tr>
+	</table>
+	<table class='tbl resultPass'>
+		<tr>
+			<td colspan='2'><hr><h2>[Pass] PHP Version 5.3.0, Thread Safe, x86</h2></td>
+		</tr>
+		<tr>
+			<td width='15%'><strong>Error Text</strong></td>
+			<td>n/a</td>
+		</tr>
+	</table>
+	<table class='tbl resultFail'>
+		<tr>
+			<td colspan='2'><hr><h2>[Fail] PHP Version 5.2.9, Non-Thread Safe, x86</h2></td>
+		</tr>
+		<tr>
+			<td width='15%'><strong>Error Text</strong></td>
+			<td>Parse error: parse error in /path/BarCodeAuthenticator/BarCodeAuthenticator.class.php on line 2<br />
+Errors parsing /path/BarCodeAuthenticator/BarCodeAuthenticator.class.php</td>
+		</tr>
+	</table>
+	<table class='tbl resultFail'>
+		<tr>
+			<td colspan='2'><hr><h2>[Fail] PHP Version 5.2.0, Thread Safe, x86</h2></td>
+		</tr>
+		<tr>
+			<td width='15%'><strong>Error Text</strong></td>
+			<td>Parse error: parse error, unexpected T_STRING in /path/BarCodeAuthenticator/BarCodeAuthenticator.class.php on line 2<br />
+Errors parsing /path/BarCodeAuthenticator/BarCodeAuthenticator.class.php</td>
+		</tr>
+	</table>
+	<table class='tbl resultFail'>
+		<tr>
+			<td colspan='2'><hr><h2>[Fail] PHP Version 5.1.6, Thread Safe, x86</h2></td>
+		</tr>
+		<tr>
+			<td width='15%'><strong>Error Text</strong></td>
+			<td>Parse error: parse error, unexpected T_STRING in /path/BarCodeAuthenticator/BarCodeAuthenticator.class.php on line 2<br />
+Errors parsing /path/BarCodeAuthenticator/BarCodeAuthenticator.class.php</td>
+		</tr>
+	</table>
+	<table class='tbl resultFail'>
+		<tr>
+			<td colspan='2'><hr><h2>[Fail] PHP Version 5.1.0, Thread Safe, x86</h2></td>
+		</tr>
+		<tr>
+			<td width='15%'><strong>Error Text</strong></td>
+			<td>Parse error: syntax error, unexpected T_STRING in /path/BarCodeAuthenticator/BarCodeAuthenticator.class.php on line 2<br />
+Errors parsing /path/BarCodeAuthenticator/BarCodeAuthenticator.class.php</td>
+		</tr>
+	</table>
+	<table class='tbl resultFail'>
+		<tr>
+			<td colspan='2'><hr><h2>[Fail] PHP Version 5.0.5, Thread Safe, x86</h2></td>
+		</tr>
+		<tr>
+			<td width='15%'><strong>Error Text</strong></td>
+			<td>Parse error: parse error, unexpected T_STRING in /path/BarCodeAuthenticator/BarCodeAuthenticator.class.php on line 2<br />
+Errors parsing /path/BarCodeAuthenticator/BarCodeAuthenticator.class.php</td>
+		</tr>
+	</table>
+	<table class='tbl resultFail'>
+		<tr>
+			<td colspan='2'><hr><h2>[Fail] PHP Version 5.0.0, Thread Safe, x86</h2></td>
+		</tr>
+		<tr>
+			<td width='15%'><strong>Error Text</strong></td>
+			<td>Parse error: parse error, unexpected T_STRING in /path/BarCodeAuthenticator/BarCodeAuthenticator.class.php on line 2<br />
+Errors parsing /path/BarCodeAuthenticator/BarCodeAuthenticator.class.php</td>
+		</tr>
+	</table>
+	<table class='tbl resultFail'>
+		<tr>
+			<td colspan='2'><hr><h2>[Fail] PHP Version 4.4.6, Thread Safe, x86</h2></td>
+		</tr>
+		<tr>
+			<td width='15%'><strong>Error Text</strong></td>
+			<td>&lt;br /&gt;<br />
+&lt;b&gt;Parse error&lt;/b&gt;:  parse error, unexpected T_STRING in &lt;b&gt;/path/BarCodeAuthenticator\BarCodeAuthenticator.class.php&lt;/b&gt; on line &lt;b&gt;2&lt;/b&gt;&lt;br /&gt;<br />
+Errors parsing /path/BarCodeAuthenticator/BarCodeAuthenticator.class.php</td>
+		</tr>
+	</table>
+	<table class='tbl resultFail'>
+		<tr>
+			<td colspan='2'><hr><h2>[Fail] PHP Version 4.3.0-dev, Thread Safe, x86</h2></td>
+		</tr>
+		<tr>
+			<td width='15%'><strong>Error Text</strong></td>
+			<td>Parse error: parse error in /path/BarCodeAuthenticator/BarCodeAuthenticator.class.php on line 2<br />
+Errors parsing /path/BarCodeAuthenticator/BarCodeAuthenticator.class.php</td>
+		</tr>
+	</table><br><br><div align='center'>Copyright &copy;2015 <a href='http://www.robert-lerner.com/'>Robert Lerner</a>, All Rights Reserved</div>
