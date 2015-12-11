@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>RLerner/BarCodeAuthenticator</title>
+		<meta name="author" content="Bob Lerner">
+		<style type="text/css">
+			body {
+				font-family: sans-serif;
+			}
+			a,a:hover,a:active,a:visited {
+				color: #009;
+			}
+			section {
+				width: 95%;
+				margin: 0px auto;
+			}
+			h1,h2,h3,h4,h5,h6 {
+				background-color: #cfc;
+				padding: 5px;
+				margin: 10px 0px 10px 0px;
+			}
+			footer {
+				background-color: #000;
+				color: #fff;
+				text-align: center;
+				padding: 5px;
+				margin-top: 10px;
+				font-size: 12px;
+			}
+			footer a, footer a:visited {
+				color: #999;
+			}
+			.box {
+				background-color: #eef;
+				padding: 0px 5px 5px 5px;
+				border-radius: 0px 0px 5px 5px;
+				font-size: 12px;
+			}
+			.box1 {}
+			.box2 {
+				margin-left: 10%;
+			}
+			.box3 {
+				margin-left: 20%;
+			}
+
+			.oldskewl td, .oldskewl th {
+				border: 1px solid #000;
+				padding: 3px;
+			}
+		</style>
+	</head>
+	<body>
+		<header>
+			<h1>RLerner/BarCodeAuthenticator</h1>
+			<em>Provides several methods for generating and reading binary streams, and bar-codes.</em>
+		</header>
+
+		<section>
+			<h2>Table of Contents</h2>
+			<ol>
+				<li><a href="#purpose">Purpose</a></li>
+				<li><a href="#usage">Usage</a></li>
+				<li><a href="#imagesize">Calculating Image Size</a></li>
+				<li><a href="#dataintegrity">Data Integrity</a>
+					<ol>
+						<li><a href="#lossycompression">Lossy Compression (JPEG, GIF)</a></li>
+						<li><a href="#resized">Bar Code / Image Resized</a></li>
+					</ol>
+				</li>
+				<li><a href="#posterization">Posterization</a></li>
+				<li><a href="#linting">Lint Tests</a></li>
+				<li><a href="https://github.com/rlerner/BarCodeAuthenticator/issues">Bug Tracking</a> (GitHub)</li>
+
+			</ol>
+		</section>
+
+		<section>
+			<div class="box box2">
+				<a name="purpose"></a>
+				<h2>Purpose</h2>
+				Often times, you want to verify ownership of an account on a site that does not provide an API, and many sites allow configuration of an avatar image on their account. Because of this, 
+				you can have your site generate barcodes from tokenized data (Unique MD5 hash, etc), and then have the user upload the image to the site in question.<br><br>
+				Later, you can call up the image and verify that it contains the barcode in the uploaded image, which ties the user on your system to another site's user.
+			</div>
+
+			<div class="box box2">
+				<a name="usage"></a>
+				<h2>Usage</h2>
+				Please refer to the /examples/ directory for usage information.
+			</div>
+
+			<div class="box box2">
+				<a name="imagesize"></a>
+				<h2>Calculating Image Size</h2>
+				The image size must be a multiple of 8, and to find the dataspace available in an image, you should follow this formula:<br>
+				<strong>dataSpace = ((imageSize*imageSize)/8)</strong><br>
+
+				An image size of 16 will perfectly hold 256 bits of information (32 characters of full ASCII). In our example, we're storing an MD5 string (128-bit), however that is due to the hexadecimal conversion. There is wasted potential here, but it is largely irrelevant, especially since the square root of 128 is not an integer.<br><br>
+
+				If you know how much data you want to store, use this formula:<br>
+				<strong>imageSize = sqrt(dataSpace)</strong><br>
+				Again, the result of this must be a multiple of 8, so you can round up, and then simply filter off any trailing data later.
+
+				<br><br>
+				<table class='oldskewl'>
+					<tr>
+						<th>Image Size</th>
+						<th>Data Space Bits</th>
+						<th>Data Space Bytes</th>
+						<th>Main Usage</th>
+					</tr>
+					<tr>
+						<td>8</td>
+						<td>8</td>
+						<td>1</td>
+						<td>None, really.</td>
+					</tr>
+					<tr>
+						<td>16</td>
+						<td>256</td>
+						<td>32</td>
+						<td>MD5 Hash</td>
+					</tr>
+					<tr>
+						<td>32</td>
+						<td>1,024</td>
+						<td>128</td>
+						<td></td>
+					</tr>
+				</table>
+			</div>
+
+
+			<div class="box box2">
+				<a name="dataintegrity"></a>
+				<h2>Data Integrity</h2>
+				Simply put, the bar code is a binary stream of your exact input data, encoded into an image where black is 1, and white is 0. The bar code is read from top left, towards the right, and then
+				on to the next row.<br><br>
+
+				The methods in this class do not verify parity, or check for false reads of the image. Generally, this isn't needed since it is more or less for validating tokens vs. an account. You can always
+				extend the class and add in parity checking methods as you see fit, within the data capacity of a given image size.<br><br>
+
+				Due to the lossless compression nature of PNG, it is preferred to use PNG files throughout the entire barcode's lifecycle. If the site that stores the barcode converts the image, there are a few constraints to be aware of:
+			</div>
+
+			<div class='box box3'>
+				<a name="lossycompression"></a>
+				<h3>Lossy Compression</h3>
+				Some sites (looking at you, Facebook) will take an image and run either a compression algorithm, or convert files to JPEG / GIF/ and so on.<br><br>
+
+				Since the methods requiring an image use GD Image Resources passed in by you, they are image type agnostic. There are, however, a few issues with sites modifying image, for example:<br>
+				<ul>
+					<li>The color set may be reduced, it is for this reason BarCodeAuthenticator uses #000000 and #FFFFFF for bar codes. While you can change them later, and the script may still
+						read the image, it greatly reduces the effectiveness of the script after compression.
+					</li>
+					<li>Some dithering, blurring, or other transformation may happen. The authenticator requires the contrast of the barcode to read it, so it will do its best by posterizing the image
+						in pre-processing, however it may fail later. Outputting the image type as indexed may correct this on some servers. 
+					</li>
+					<li>If you embed the barcode into an image, you run the risk of the compression using the entire gamut of colors and reducing the readability of the bar code.</li>
+				</ul>
+			</div>
+
+			<div class="box box3">
+				<a name="resized"></a>
+				<h3>Bar Code / Image Resized</h3>
+				If the site scales the image, it will be unreadable. Currently, there is no native support for auto-scaling images containing barcodes. You can extend the class yourself, or
+				you can embed the barcode into the image. The image should be the native resolution, or the "after-scaling" image size, that way the site you're uploading to doesn't need to
+				scale the image itself.
+			</div>
+
+			<div class="box box2">
+				<a name="posterization"></a>
+				<h2>Posterization</h2>
+				From Wikipedia:
+				<div class="box box1">
+					<em>"Posterization or posterisation of an image entails conversion of a continuous gradation of tone to several regions of fewer tones, with abrupt changes from one tone to another."</em>
+				</div>
+				<br><br>
+				Since BarCodeAuthenticator requires two distict color values, there is a very limited posterizer method built into BCA (::posterizeValue()). This is in an attempt to fix any color issues from
+				a site's compression algorithm, resizing artificats, or from edge cases where people change the colors, or blend the image into another image.<br><br>
+
+				Ideally, you should not color the barcode, however it may just work. That's up to you to discover, but here's help:<br>
+				<ul>
+					<li>Individual pixel is decomposted into distinct red, green, and blue values, each 0-255</li>
+					<li>The Red, Green, and Blue values are averaged to present a greyscale value, again 0-255</li>
+					<li>Results less than 128 become 0 (black), and those greater than or equal to 128 become 16,777,215 (white)</li>
+					<li>Black is interpreted as a "1" in binary, and white a "0"</li>
+				</ul>
+
+				So, lets take a perfectly red pixel (255,0,0), average is 85. You'll get a binary 0, even though it's 255. Or Yellow? (255,255,0) You get 170, now it is binary 1.<br><br>
+				Likewise, you can somewhat visually hide the barcode by setting the 0 color to 128, and 1 to 127, but you lose a lot of margin in the posterizer if the site changes the image.
+
+			</div>
+
+			<div class="box box2">
+				<a name="linting"></a>
+				<h2>Lint Tests</h2>
+				You can view the <a href="lint-output.html">Lint Output</a>, which will show which versions the BarCodeAuthenticator are syntatically correct. Since namespaces were added in PHP 5.3.0, that is the minumum version BarCodeAuthenticator can operate on. If you do not need namespaces, you can remove it from the class file, and the script tests down to and including PHP 5.0.0 for compatibility.
+			</div>
+
+		
+		</section>
+
+
+		<footer>
+			<strong>BarCodeAuthenticator</strong> | Copyright &copy;2015 <a href="http://www.robert-lerner.com/">Robert Lerner</a>, All Rights Reserved | Licensed under <a href="https://opensource.org/licenses/MIT">MIT License</a>
+		</footer>
+	</body>
+</html>
