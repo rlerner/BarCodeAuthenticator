@@ -22,4 +22,4 @@ $imageResource = $bca->streamToImage($binaryStream);
 header("Content-Type: image/png");
 
 // Output the PNG Image
-imagepng($imageResource);
+imagepng($imageResource,"demo.png");

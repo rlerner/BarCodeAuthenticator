@@ -11,7 +11,8 @@ $im = imagecreatefrompng("demo.png");
 
 // Since the demo.png image is 100x100, and the bar code is in the bottom right, we need to
 // set the base reading offset to 84 for each coordinate.
-$bca->baseReadingOriginX = $bca->baseReadingOriginY = 84;
+//$bca->baseReadingOriginX = $bca->baseReadingOriginY = 84;
+$bca->baseReadingOriginX = $bca->baseReadingOriginY = 0;
 
 // Convert the image to a binary stream of 100110010101 etc
 $stream = $bca->imageToStream($im);

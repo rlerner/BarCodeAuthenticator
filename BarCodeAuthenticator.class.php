@@ -13,9 +13,9 @@ namespace RLerner\BarCodeAuthenticator;
  * @category
  * @package BarCodeAuthenticator
  * @author Robert Lerner <rlerne@gmail.com>
- * @copyright 2015 Robert Lerner
+ * @copyright 2015-2018 Robert Lerner
  * @license https://opensource.org/licenses/MIT MIT License 1.0
- * @version 0.1.0
+ * @version 1.0.0
  * @link https://github.com/rlerner/BarCodeAuthenticator
  *
  *
@@ -57,12 +57,12 @@ class BarCodeAuthenticator {
 	/**
 	 * Returns Binary Stream from String
 	 *
-     * This method parses an ASCII String into bytes (8-bit chunks) and outputs a binary stream.
-     *
+	 * This method parses an ASCII String into bytes (8-bit chunks) and outputs a binary stream.
+	 *
 	 * @param String Data Stream of ASCII Characters, that must be (($imageSize*$imageSize)/8) characters in length.
-     * @return Binary Stream Representation of String
-     * @access public
-     * @since Method available since 0.1.0
+	 * @return Binary Stream Representation of String
+	 * @access public
+	 * @since Method available since 0.1.0
 	*/
 	public function stringToBinaryStream($string) {
 		if (strlen($string)!=(($this->imageSize*$this->imageSize)/8)) {
@@ -79,12 +79,12 @@ class BarCodeAuthenticator {
 	/**
 	 * Returns a String Representation of a Binary Stream
 	 *
-     * This method parses a binary stream into 8-bit chunks and outputs the ASCII Value correlating with that character.
-     *
+	 * This method parses a binary stream into 8-bit chunks and outputs the ASCII Value correlating with that character.
+	 *
 	 * @param string $binary A Binary Representation of Data in 8-bit chunks.
-     * @return String representation of the Binary Stream
-     * @access public
-     * @since Method available since 0.1.0
+	 * @return String representation of the Binary Stream
+	 * @access public
+	 * @since Method available since 0.1.0
 	*/
 	public function binaryStreamToString($binary) {
 		$hashSplit = str_split($binary,8);
@@ -98,12 +98,12 @@ class BarCodeAuthenticator {
 	/**
 	 * Returns a Bar Code Image Representation of a Binary Stream
 	 *
-     * Returns a GD Library image.
-     *
+	 * Returns a GD Library image.
+	 *
 	 * @param string Binary Stream
-     * @return Resource GD Library Resource containing the bar code image.
-     * @access public
-     * @since Method available since 0.1.0
+	 * @return Resource GD Library Resource containing the bar code image.
+	 * @access public
+	 * @since Method available since 0.1.0
 	*/
 	public function streamToImage($stream) {
 		$iterator = 0;
@@ -125,14 +125,14 @@ class BarCodeAuthenticator {
 	 *
 	 * Posterizes (reduces the color to min or max). Works by converting a truecolor pixel to grayscale by averaging R,G, and B values,
 	 * and sets $min to averages between 0-127, and $max to averages between 128-255 (if threshold default is used.)
-     *
-     * @param integer $val Color Value to Posterize
-     * @param integer $min Low-End Posterization Color
-     * @param integer $max High-End Posterization Color
-     * @param integer $threshold Value between 0-255 dictating the posterization break point.
-     * @return integer Representing Posterized Value
-     * @access public
-     * @since Method available since 0.1.0
+	 *
+	 * @param integer $val Color Value to Posterize
+	 * @param integer $min Low-End Posterization Color
+	 * @param integer $max High-End Posterization Color
+	 * @param integer $threshold Value between 0-255 dictating the posterization break point.
+	 * @return integer Representing Posterized Value
+	 * @access public
+	 * @since Method available since 0.1.0
 	*/
 	public function posterizeValue($val,$min=0,$max=16777215,$threshold=127) {
 		$r = ($val >> 16) & 0xFF;
@@ -149,19 +149,20 @@ class BarCodeAuthenticator {
 	/**
 	 * Returns a Binary Stream from an Image
 	 *
-     * Reads a GD Library Image resource containing a barcode, and returns a binary stream of data.
-     *
+	 * Reads a GD Library Image resource containing a barcode, and returns a binary stream of data.
+	 *
 	 * @param Resource GD Library Image Resource containing a Bar Code
-     * @return Binary Stream Representation of Bar Code
-     * @access public
-     * @since Method available since 0.1.0
+	 * @return Binary Stream Representation of Bar Code
+	 * @access public
+	 * @since Method available since 0.1.0
 	*/
 	public function imageToStream($im) {
+		$outStr = "";
 		for ($y=0;$y<$this->imageSize;$y++) {
 			for ($x=0;$x<$this->imageSize;$x++) {
 				$col = imagecolorat($im,$x+$this->baseReadingOriginX,$y+$this->baseReadingOriginY);
 				$col = $this->posterizeValue($col);
-				//Compare Color
+				// Compare Color
 				if ($col==16777215) {
 					$outStr .= 0;
 				} else {
